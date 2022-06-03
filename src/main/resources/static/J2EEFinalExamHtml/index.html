@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>客户信息管理</title>
+    <script src="js/vue.js"></script>
+    <script src="js/axios.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.zhimg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.zhimg.com/element-ui/lib/index.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <!-- 导航栏 -->
+        <div style="width: 100%;height: 80px;background-color: rgb(36, 126, 140);">
+            <div style="height: 20px;"></div>
+            <span style="color: white;font-size:30px;">企业进销存管理系统</sp>
+                <div style="float: right;">
+                    <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"></el-avatar>
+                    <span style="color: white;font-size:40px;">{{active}}</span>
+                    <el-dropdown>
+                        <span class="el-dropdown-link" style="color: white;font-size:40px">
+                            <i class="el-icon-s-fold"></i>
+                        </span>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item><span @click="logout">登出</span></el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                </div>
+        </div>
+        <div>
+            <div style="width: 15%;float: left;">
+                <el-menu default-active="1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose">
+                    <el-menu-item index="1" @click="gotoOther('customer.html')">
+                        <i class="el-icon-user-solid"></i>
+                        <span>客户列表</span>
+                    </el-menu-item>
+
+
+                    <el-submenu index="2">
+                        <template slot="title">
+                            <i class="el-icon-s-goods"></i>
+                            <span>商品信息管理</span>
+                        </template>
+                        <el-menu-item-group>
+                            <template slot="title">分组一</template>
+                            <el-menu-item index="2-1" @click="gotoOther('shop.html')">商品列表</el-menu-item>
+                            <el-menu-item index="2-2" @click="gotoOther('sale.html')">销售记录</el-menu-item>
+                        </el-menu-item-group>
+                    </el-submenu>
+                    <el-menu-item index="3" @click="gotoOther('purchase.html')">
+                        <i class="el-icon-s-goods"></i>
+                        <span>采购信息管理</span>
+                    </el-menu-item>
+                </el-menu>
+            </div>
+
+            <!-- 导航栏 end -->
+            <div style="width: 85%;height: 100%;float: left;">
+                <iframe :src="src" width="100%" height="600px" scrolling="no" frameborder="0">
+
+                </iframe>
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                activeIndex2: '1',
+                active: 'admin',
+                src: 'customer.html',
+
+            },
+            methods: {
+                goBack() {
+                    console.log('go back');
+                },
+                handleSelect(key, keyPath) {
+                    console.log(key, keyPath);
+                },
+                handleOpen(key, keyPath) {
+                    console.log(key, keyPath);
+                },
+                handleClose(key, keyPath) {
+                    console.log(key, keyPath);
+                },
+                getActive() {
+
+                    if (localStorage.getItem('active') == null) {
+                        this.$confirm('您还没有登录!', '提示', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                            type: 'warning'
+                        }).then(() => {
+                            window.location.href = "login.html";
+                        })
+                    } else {
+                        this.active = localStorage.getItem('active');
+                        this.$confirm('欢迎您' + this.active, '提示')
+                    }
+
+                },
+                logout() {
+                    this.$confirm('确定要退出吗?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        localStorage.removeItem('active');
+                        window.location.href = "login.html";
+                    }).catch(() => {
+                        this.$message({
+                            type: 'info',
+                            message: '已取消'
+                        });
+                    });
+                },
+                gotoOther(src) {
+                    this.src = src;
+                }
+            },
+            mounted() {
+                this.getActive();
+            },
+
+        })
+    </script>
+</body>
+
+</html>

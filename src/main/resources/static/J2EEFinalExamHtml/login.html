@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="js/vue.js"></script>
+    <script src="js/axios.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.zhimg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.zhimg.com/element-ui/lib/index.js"></script>
+</head>
+
+<body>
+    <div id="app">
+
+
+        <!--elment-ui login -->
+        <el-container>
+            <el-header style="height: 100px; background-color: #00a0e9;">
+                <el-row>
+                    <el-col :span="12" :offset="6">
+                        <el-row>
+                            <el-col :span="12">
+                                <h1 style="color: white;">企业进销存管理系统</h1>
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                </el-row>
+            </el-header>
+            <el-main>
+                <el-row>
+                    <el-col :span="12" :offset="6">
+                        <el-form :model="form" ref="form" label-width="100px">
+                            <el-form-item label="Name" prop="name">
+                                <el-input v-model="form.name" placeholder="Name"></el-input>
+                            </el-form-item>
+                            <el-form-item label="Password" prop="password">
+                                <el-input v-model="form.password" type="password" placeholder="Password"></el-input>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button type="primary" @click="login">Login</el-button>
+                            </el-form-item>
+                        </el-form>
+                    </el-col>
+                </el-row>
+            </el-main>
+        </el-container>
+    </div>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                form: {
+                    name: '',
+                    password: ''
+                }
+            },
+            methods: {
+                login() {
+                    axios.post("http://localhost:8080/manager/login", this.form)
+                        .then(res => {
+                            if (res.data.code == 200) {
+                                this.$message({
+                                    message: res.data.reason,
+                                    type: 'success'
+                                });
+                                localStorage.setItem('active', res.data.data);
+                                //跳转到Customer.html
+                                location.href = "index.html"
+                            } else {
+                                this.$message({
+                                    message: res.data.reason,
+                                    type: 'error'
+                                });
+                            }
+                        })
+                },
+            }
+
+        });
+    </script>
+</body>
+
+</html>
